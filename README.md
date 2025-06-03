@@ -1,4 +1,9 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🎯 Task Management Frontend (Next.js 15 + TypeScript)
+
+This is the **frontend** for the Task Management System built with **Next.js App Router**, **TypeScript**, **Tailwind CSS**, and **Fetch**. It connects to a Node.js + Express + MongoDB backend API.
+
+---
+
 
 ## Getting Started
 
@@ -12,25 +17,47 @@ yarn dev
 pnpm dev
 # or
 bun dev
-```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## ⚙️ Tech Stack
 
-## Learn More
+- **Next.js 15+** (App Router)
+- **TypeScript**
+- **Tailwind CSS**
+- **Fetch** for API communication
+- **JWT Authentication**
+- **React Hook Form** for form handling
+- **Zod** (optional) for schema validation
+- **Reusable Components** and API abstraction
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## ✅ Features
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### 🔐 Authentication
+- Signup & Login with JWT token
+- Auth token stored in local/session storage
+- Authenticated route protection
+-
 
-## Deploy on Vercel
+### 📋 Task Management
+- Fetch and display tasks for authenticated users
+- Create, update, and delete tasks
+- Admin can view all users’ tasks
+- Conditional API calls based on user ID or role
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### 👥 User Management (Admin)
+- View list of users
+- Fetch tasks for specific user
+- Role-based UI rendering
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### 🧠 Smart API Handling
+- Fetch abstraction (`sendRequest`)
+- Auto handles headers (e.g., Authorization)
+- Graceful error handling and UI feedback
+
+---
+
+
+

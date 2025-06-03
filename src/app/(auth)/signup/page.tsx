@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 import { SIGN_UP_REQUEST } from '@/modules/AuthModule/Types/RequestTypes';
 import { useFetcher } from '@/Hooks/useFetcher';
+import { useRouter } from 'next/navigation';
 
 type FormInputs = SIGN_UP_REQUEST & {
     confirmPassword: string;
@@ -13,6 +14,7 @@ type FormInputs = SIGN_UP_REQUEST & {
 
 export default function SignupPage() {
     const { loading, error, sendRequest } = useFetcher();
+    const router = useRouter();
 
     const {
         register,
@@ -30,8 +32,9 @@ export default function SignupPage() {
         },
     });
 
-    const handleSignUp = handleSubmit(async (values) => {
-        await sendRequest({
+  const handleSignUp = handleSubmit(async (values) => {
+    try {
+       const response =   await sendRequest({
             url: 'http://localhost:3003/api/auth/signup',
             method: 'POST',
             body: {
@@ -41,8 +44,19 @@ export default function SignupPage() {
                 role: values.role,
             },
         });
+        console.log('Signup response:', response);
+        if (response && (response.status === 200 || response.status === 201)) {
+ // ✅ Redirect to login after successful signup
+        router.push('/'); // replace with your actual login route
+        }
 
-    })
+
+    } catch (error) {
+        console.error('Signup failed:', error);
+        // Optionally show error UI
+    }
+});
+
 
     const password = watch('password');
 

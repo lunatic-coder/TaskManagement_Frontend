@@ -11,6 +11,7 @@ export type SIGN_UP_RESPONSE = {
 
 export type LOGIN_RESPONSE = {
   token: string;
+  isLoggedIn: boolean;
   user: {
     id: string;
     username: string;

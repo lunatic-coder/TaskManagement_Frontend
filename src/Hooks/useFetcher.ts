@@ -18,7 +18,7 @@ export interface HttpOptions {
 export function useFetcher (){
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<ErrorResponse | null>(null);
-  const [data, setData] = useState< null>(null);
+  const [data, setData] = useState<{ data: unknown; status: number } | null>(null);
 
   const sendRequest = async (options: HttpOptions) => {
     const { url, method, body, headers } = options;
@@ -35,6 +35,7 @@ export function useFetcher (){
           ...(headers || {}),
         },
 
+
       };
 
       if (method !== 'GET') {
@@ -42,15 +43,24 @@ export function useFetcher (){
       }
 
       const response = await fetch(url, config);
-
       const responseData = await response.json();
+
+
 
       if (!response.ok) {
         throw new Error(JSON.stringify(responseData));
       }
 
-      setData(responseData);
-      return responseData;
+
+
+    const finalData = {
+      data: responseData,
+      status: response.status,
+    };
+
+
+      setData(finalData);
+      return finalData;
     } catch (err: unknown) {
       let parsedError: ErrorResponse = {
         message: 'An unknown error occurred',

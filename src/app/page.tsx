@@ -1,10 +1,11 @@
 'use client';
 
-import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import Link from 'next/link';
 
 import { LOGIN_REQUEST } from '@/modules/AuthModule/Types/RequestTypes';
+import { useFetcher } from '@/Hooks/useFetcher';
+import { useRouter } from 'next/navigation';
 
 export default function LoginPage() {
   const {
@@ -14,22 +15,40 @@ export default function LoginPage() {
     clearErrors,
   } = useForm<LOGIN_REQUEST>();
 
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState('');
 
-  const handleLoginData = handleSubmit(async (values) => {
-    try {
-      setIsLoading(true);
-      setError('');
-      console.log('values', values);
 
-      // Simulate login API call
-      setIsLoading(false);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Something went wrong');
-      setIsLoading(false);
+   const { loading, error, sendRequest } = useFetcher();
+   const router = useRouter();
+
+ const handleLoginData = handleSubmit(async (values) => {
+  try {
+    const response = await sendRequest({
+      url: 'http://localhost:3003/api/auth/login',
+      method: 'POST',
+      body: {
+        email: values.email,
+        password: values.password,
+      },
+    });
+
+    if (response?.status === 200 || response?.status === 201) {
+      // ✅ Add `isLoggedIn: true` and store user data in localStorage
+      const userData = {
+        ...response.data,   // contains token and user
+        isLoggedIn: true,
+      };
+
+      localStorage.setItem('user', JSON.stringify(userData));
+
+      // ✅ Redirect to dashboard
+      router.push('/dashboard');
     }
-  });
+  } catch (error) {
+    console.error('Login failed:', error);
+    // Optionally show error UI
+  }
+});
+
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
@@ -85,7 +104,7 @@ export default function LoginPage() {
 
           {error && (
             <div className="text-sm text-red-600 bg-red-50 border border-red-200 p-2 rounded">
-              {error}
+                 {errors.email && <p className="text-sm text-red-600 mt-1">{errors.email.message}</p>}
             </div>
           )}
 
@@ -105,10 +124,10 @@ export default function LoginPage() {
 
           <button
             type="submit"
-            disabled={isLoading}
+            disabled={loading}
             className="w-full bg-indigo-600 text-white text-sm py-2 rounded-md hover:bg-indigo-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {isLoading ? 'Logging in...' : 'Sign In'}
+            {loading ? 'Logging in...' : 'Sign In'}
           </button>
         </form>
       </div>
